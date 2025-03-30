@@ -148,14 +148,4 @@ public class MemberBorrowController {
         lblSearchAlert.setText(" ");
       //  allBookId();
     }
-
-    @FXML
-    void txtSearchOnAction(ActionEvent event) {
-    
-        }
-
-    @FXML
-   void txtSearchOnMouseMoved(MouseEvent event) {
-      lblSearchAlert.setText(" ");
-   }
 }
