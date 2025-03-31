@@ -10,7 +10,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -45,7 +44,7 @@ public class MemberBorrowedBooksController {
     @FXML
     public void initialize() {
         colIsbn.setCellValueFactory(data -> new SimpleStringProperty(String.valueOf(data.getValue().getBookId())));
-        colTitle.setCellValueFactory(new PropertyValueFactory<>("bookTitle"));
+        colTitle.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBookTitle()));
         colDueDate.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDueDate().toString()));
         colBorrowDate.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBorrowDate().toString()));
 
@@ -61,31 +60,38 @@ public class MemberBorrowedBooksController {
 
     @FXML
     private void txtSearchOnAction() {
-        String input = txtSearch.getText().trim();
+        String keyword = txtSearch.getText().trim().toLowerCase();
 
-        if (input.isEmpty()) {
+        if (keyword.isEmpty()) {
             loadBorrowedBooks();
             return;
         }
 
-        try {
-            int id = Integer.parseInt(input);
-            List<BorrowRecord> filtered = borrowRecordDAO.getUserActiveLoans(currentUser.getUserId())
+        List<BorrowRecord> filtered = borrowRecordDAO.getUserActiveLoans(currentUser.getUserId())
                 .stream()
-                .filter(r -> r.getBorrowId() == id)
+                .filter(r -> r.getBookTitle() != null && r.getBookTitle().toLowerCase().contains(keyword))
                 .collect(Collectors.toList());
 
-            borrowedBooksTable.getItems().setAll(filtered);
-            lblSearchAlert.setText(filtered.isEmpty() ? "No matching borrow ID found." : "");
-
-        } catch (NumberFormatException e) {
-            lblSearchAlert.setText("Please enter a valid numeric ID.");
-        }
+        borrowedBooksTable.getItems().setAll(filtered);
+        lblSearchAlert.setText(filtered.isEmpty() ? "No books matching title." : "");
     }
 
     @FXML
     private void btnReturnedBooksOnAction() {
-        // TODO: Load returned books page
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MemberReturnedBooks.fxml"));
+            Parent root = loader.load();
+
+            MemberReturnedBooksController controller = loader.getController();
+            controller.setUser(currentUser);
+
+            Stage stage = (Stage) borrowedBooksTable.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Returned Books");
+
+        } catch (IOException e) {
+            showAlert("Failed to load returned books view: " + e.getMessage());
+        }
     }
 
     private void addReturnButtonToTable() {
@@ -119,12 +125,10 @@ public class MemberBorrowedBooksController {
                 super.updateItem(record, empty);
                 if (record == null || empty) {
                     setStyle("");
+                } else if (record.getDueDate().before(new Date(System.currentTimeMillis()))) {
+                    setStyle("-fx-background-color: #ffd6d6;"); // light red for overdue
                 } else {
-                    if (record.getDueDate().before(new Date(System.currentTimeMillis()))) {
-                        setStyle("-fx-background-color: #ffd6d6;"); // light red for overdue
-                    } else {
-                        setStyle(""); // normal
-                    }
+                    setStyle("");
                 }
             }
         });
