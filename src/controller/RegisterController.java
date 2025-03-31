@@ -1,246 +1,184 @@
-/**
- *
- * @author kossy
- */
 package controller;
 
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.stage.Stage;
-import Model.User;
 import DAO.UserDAO;
-import util.PasswordUtils;
-import java.io.IOException;
+import Model.User;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import util.Navigation;
+import javafx.scene.control.ComboBox;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+
+import java.io.IOException;
 
 public class RegisterController {
-    // FXML injected fields
-    @FXML private TextField firstNameField;
-    @FXML private TextField lastNameField;
-    @FXML private TextField emailField;
-    @FXML private TextField phoneField;
-    @FXML private TextField usernameField;
-    @FXML private PasswordField passwordField;
-    @FXML private PasswordField confirmPasswordField;
-    @FXML private ComboBox<String> userTypeCombo;
-    @FXML private ComboBox<String> memberTypeCombo;
-    @FXML private Label errorLabel;
-    
-    // DAO and state
-    private UserDAO userDAO = new UserDAO();
-    private User currentUser;
 
+    @FXML 
+    private TextField txtFirstName;
+    
+    @FXML 
+    private TextField txtLastName;
+    
+    @FXML 
+    private TextField txtContactNo;
+    
+    @FXML 
+    private TextField txtEmail;
+    
+    @FXML 
+    private TextField txtUsername;
+    
+    @FXML 
+    private PasswordField txtPassword;
+
+    @FXML 
+    private Label lblFirstNameAlert;
+    
+    @FXML 
+    private Label lblLastNameAlert;
+    
+    @FXML 
+    private Label lblContactNoAlert;
+    
+    @FXML 
+    private Label lblEmailAlert;
+    
+    @FXML 
+    private Label lblUsernameAlert;
+    
+    @FXML 
+    private Label lblPasswordAlert;
+    
+    @FXML 
+    private ComboBox<String> comboMemberType;
+    
+    @FXML 
+    private Label lblMemberTypeAlert;
+
+
+    private final UserDAO userDAO = new UserDAO();
+    
     @FXML
     public void initialize() {
-        
-        // Initialize with defaults
-        ObservableList<String> defaultUserTypes = FXCollections.observableArrayList("ADMIN", "LIBRARIAN", "MEMBER");
-        ObservableList<String> memberTypes = FXCollections.observableArrayList("FACULTY", "STUDENT");
-        
-        try {
-            userTypeCombo.setItems(defaultUserTypes);
-            memberTypeCombo.setItems(memberTypes);
-            
-            userTypeCombo.getSelectionModel().selectFirst();
-            memberTypeCombo.getSelectionModel().selectFirst();
-            
-            // Set initial visibility
-            memberTypeCombo.setVisible(false);
-            
-            // Set up listener only if components are properly injected
-            if (userTypeCombo != null && memberTypeCombo != null) {
-                userTypeCombo.valueProperty().addListener((obs, oldVal, newVal) -> {
-                    if (newVal != null) {
-                        memberTypeCombo.setVisible("MEMBER".equals(newVal));
-                    }
-                });
-            }
-            
-        } catch (Exception e) {
-            System.err.println("Error during initialization: " + e.getMessage());
-            e.printStackTrace();
-        }
+        comboMemberType.setItems(FXCollections.observableArrayList("STUDENT", "FACULTY"));
     }
 
-    public void setCurrentUser(User user) {
-        this.currentUser = user;
-        
-        // Refresh UI if components are ready
-        if (userTypeCombo != null) {
-            setupUserTypeCombo();
-        }
-    }
 
-    private void setupUserTypeCombo() {
-        try {
-            ObservableList<String> options = FXCollections.observableArrayList();
-            
-            if (currentUser != null) {
-                if ("ADMIN".equals(currentUser.getUserType())) {
-                    options.addAll("ADMIN", "LIBRARIAN", "MEMBER");
-                } else if ("LIBRARIAN".equals(currentUser.getUserType())) {
-                    options.addAll("STUDENT", "FACULTY");
-                }
-            }
-            
-            // Default options for public registration
-            if (options.isEmpty()) {
-                options.addAll("LIBRARIAN", "MEMBER");
-            }
-            
-            userTypeCombo.setItems(options);
-            userTypeCombo.getSelectionModel().selectFirst();
-            
-        } catch (Exception e) {
-            System.err.println("Error setting up user types: " + e.getMessage());
-            e.printStackTrace();
+    @FXML
+    private void btnSignUpOnAction(ActionEvent event) {
+        clearAlerts();
+
+        String firstName = txtFirstName.getText().trim();
+        String lastName = txtLastName.getText().trim();
+        String phone = txtContactNo.getText().trim();
+        String email = txtEmail.getText().trim();
+        String username = txtUsername.getText().trim();
+        String password = txtPassword.getText().trim();
+
+        boolean hasError = false;
+        
+        String memberType = comboMemberType.getValue();
+        if (memberType == null || memberType.isEmpty()) {
+            lblMemberTypeAlert.setText("Please select member type.");
+            hasError = true;
+        }
+
+        if (firstName.isEmpty()) {
+            lblFirstNameAlert.setText("First name is required.");
+            hasError = true;
+        }
+
+        if (lastName.isEmpty()) {
+            lblLastNameAlert.setText("Last name is required.");
+            hasError = true;
+        }
+
+        if (phone.isEmpty()) {
+            lblContactNoAlert.setText("Contact number is required.");
+            hasError = true;
+        }
+
+        if (email.isEmpty()) {
+            lblEmailAlert.setText("Email is required.");
+            hasError = true;
+        } else if (userDAO.existsByEmail(email)) {
+            lblEmailAlert.setText("Email already exists.");
+            hasError = true;
+        }
+
+        if (username.isEmpty()) {
+            lblUsernameAlert.setText("Username is required.");
+            hasError = true;
+        } else if (userDAO.existsByUsername(username)) {
+            lblUsernameAlert.setText("Username already exists.");
+            hasError = true;
+        }
+
+        if (password.isEmpty()) {
+            lblPasswordAlert.setText("Password is required.");
+            hasError = true;
+        }
+
+        if (hasError) return;
+
+        User newUser = new User();
+        newUser.setFirstName(firstName);
+        newUser.setLastName(lastName);
+        newUser.setPhone(phone);
+        newUser.setEmail(email);
+        newUser.setUsername(username);
+        newUser.setPassword(password);
+        newUser.setUserType("MEMBER");
+        newUser.setMemberType(memberType);
+
+
+        boolean success = userDAO.addUser(newUser);
+
+        if (success) {
+            showSuccess("Account created! You can now sign in.");
+            redirectToLogin(event);
+        } else {
+            showError("Failed to register. Please try again.");
         }
     }
 
     @FXML
-    private void handleRegister() {
+    private void btnSignInOnAction(ActionEvent event) {
         try {
-            if (!validateInputs()) return;
-            
-            String userType = userTypeCombo.getValue();
-            String memberType = "MEMBER".equals(userType) ? memberTypeCombo.getValue() : null;
-            
-            // Permission checks
-            if (currentUser != null && !userDAO.canCreateUserType(currentUser.getUserType(), userType)) {
-                showError("You don't have permission to create " + userType + " accounts");
-                return;
-            }
-            
-            // Anonymous registration restrictions
-            if (currentUser == null && !"MEMBER".equals(userType)) {
-                showError("Only member registration is allowed");
-                return;
-            }
-            
-            if (!validateUniqueCredentials()) return;
-            
-            if (createNewUser(userType, memberType)) {
-                showSuccess("Registration successful!" + 
-                           (currentUser == null ? " Please login." : ""));
-                handleCancel();
-            }
-        } catch (Exception e) {
-            System.err.println("Error during registration: " + e.getMessage());
-            e.printStackTrace();
-            showError("An unexpected error occurred during registration");
-        }
-    }
-
-    private boolean validateInputs() {
-        try {
-            if (firstNameField.getText().isEmpty() || lastNameField.getText().isEmpty() ||
-                emailField.getText().isEmpty() || usernameField.getText().isEmpty() ||
-                passwordField.getText().isEmpty() || confirmPasswordField.getText().isEmpty()) {
-                
-                showError("All fields are required");
-                return false;
-            }
-            
-            if (!passwordField.getText().equals(confirmPasswordField.getText())) {
-                showError("Passwords do not match");
-                return false;
-            }
-            
-            if (passwordField.getText().length() < 6) {
-                showError("Password must be at least 6 characters");
-                return false;
-            }
-            
-            if (!emailField.getText().matches("^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-                showError("Invalid email format");
-                return false;
-            }
-            
-            return true;
-        } catch (Exception e) {
-            System.err.println("Validation error: " + e.getMessage());
-            return false;
-        }
-    }
-
-    private boolean validateUniqueCredentials() {
-        try {
-            String username = usernameField.getText().trim();
-            String email = emailField.getText().trim();
-            
-            if (userDAO.getUserByUsername(username) != null) {
-                showError("Username already exists");
-                return false;
-            }
-            
-            if (userDAO.getUserByEmail(email) != null) {
-                showError("Email already registered");
-                return false;
-            }
-            
-            return true;
-        } catch (Exception e) {
-            System.err.println("Error checking credentials: " + e.getMessage());
-            showError("Error checking credentials availability");
-            return false;
-        }
-    }
-
-    private boolean createNewUser(String userType, String memberType) {
-        try {
-            User newUser = new User();
-            newUser.setFirstName(firstNameField.getText().trim());
-            newUser.setLastName(lastNameField.getText().trim());
-            newUser.setEmail(emailField.getText().trim());
-            newUser.setPhone(phoneField.getText().trim());
-            newUser.setUsername(usernameField.getText().trim());
-            newUser.setPassword(PasswordUtils.hashPassword(passwordField.getText()));
-            newUser.setUserType(userType);
-            newUser.setMemberType(memberType);
-            
-            boolean success = userDAO.addUser(newUser);
-            if (!success) {
-                showError("Registration failed. Please try again.");
-            }
-            return success;
-        } catch (Exception e) {
-            System.err.println("Error creating user: " + e.getMessage());
-            e.printStackTrace();
-            showError("Error creating user account");
-            return false;
-        }
-    }
-
-    @FXML
-    private void handleCancel() {
-        try {
-            String fxml = currentUser != null ? "/view/AdminDashboard.fxml" : "/view/Login.fxml";
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
-            Parent root = loader.load();
-            
-            Stage stage = (Stage) usernameField.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
+            Navigation.switchNavigation("Login.fxml", event);
         } catch (IOException e) {
-            System.err.println("Error navigating back: " + e.getMessage());
-            e.printStackTrace();
-            showError("Error navigating back");
+            showError("Unable to load login: " + e.getMessage());
         }
     }
-    
-    private void showError(String message) {
-        errorLabel.setText(message);
-        errorLabel.setStyle("-fx-text-fill: red;");
-        errorLabel.setVisible(true);
+
+    private void clearAlerts() {
+        lblFirstNameAlert.setText("");
+        lblLastNameAlert.setText("");
+        lblContactNoAlert.setText("");
+        lblEmailAlert.setText("");
+        lblUsernameAlert.setText("");
+        lblPasswordAlert.setText("");
     }
-    
+
+    private void showError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Registration Error");
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
     private void showSuccess(String message) {
-        errorLabel.setText(message);
-        errorLabel.setStyle("-fx-text-fill: green;");
-        errorLabel.setVisible(true);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Registration Successful");
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private void redirectToLogin(ActionEvent event) {
+        try {
+            Navigation.switchNavigation("Login.fxml", event);
+        } catch (IOException e) {
+            showError("Unable to load login page.");
+        }
     }
 }

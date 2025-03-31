@@ -31,7 +31,7 @@
                         <Label fx:id="lblSignUp" layoutX="66.0" layoutY="13.0" text="SIGN UP" textFill="WHITE" />
                     </children>
                 </Pane>
-                <Button blendMode="OVERLAY" layoutX="144.0" layoutY="408.0" onAction="#btnSignUpOnAction" onMouseEntered="#btnSignUpOnMouseEntered" onMouseExited="#btnSignUpOnMouseExited" prefHeight="42.0" prefWidth="185.0" style="-fx-background-radius: 15px;" text=" ">
+                <Button blendMode="OVERLAY" layoutX="144.0" layoutY="408.0" onAction="#btnSignUpOnAction" prefHeight="42.0" prefWidth="185.0" style="-fx-background-radius: 15px;" text=" ">
                 </Button>
               <Label layoutX="109.0" layoutY="237.0" prefHeight="76.0" prefWidth="262.0" text="Library Management System" textAlignment="CENTER" textFill="WHITE" wrapText="true">
                   <font>
@@ -56,7 +56,7 @@
                 <Label fx:id="lblSignIn" layoutX="109.0" layoutY="13.0" text="SIGN IN" textFill="WHITE" />
             </children>
         </Pane>
-        <Button blendMode="OVERLAY" layoutX="96.0" layoutY="420.0" onAction="#btnSignInOnAction" onMouseEntered="#btnSignInOnMouseEntered" onMouseExited="#btnSignInOnMouseExited" prefHeight="42.0" prefWidth="267.0" style="-fx-background-radius: 15px;" text=" ">
+        <Button blendMode="OVERLAY" layoutX="96.0" layoutY="420.0" onAction="#btnSignInOnAction" prefHeight="42.0" prefWidth="267.0" style="-fx-background-radius: 15px;" text=" ">
         </Button>
       <Label fx:id="lblUsernameAlert" layoutX="107.0" layoutY="298.0" textFill="RED">
          <font>
