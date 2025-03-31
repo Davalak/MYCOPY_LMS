@@ -7,8 +7,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.stage.Modality;
 import controller.AdminMainController;
 import controller.MemberMainController;
+import java.util.function.Consumer;
+
 
 import java.io.IOException;
 
@@ -107,4 +110,33 @@ public class Navigation {
             }
         }
     }
+    
+    public static <T> void switchNavigation(String fxmlFile, ActionEvent event, Consumer<T> controllerHandler) throws IOException {
+        FXMLLoader loader = new FXMLLoader(Navigation.class.getResource("/view/" + fxmlFile));
+        Parent root = loader.load();
+
+        // Get the controller and pass it to the handler
+        Object controller = loader.getController();
+        controllerHandler.accept((T) controller);
+
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.centerOnScreen();
+        stage.show();
+    }
+    
+     public static <T> void openPopup(String fxmlPath, Consumer<T> controllerHandler) throws IOException {
+        FXMLLoader loader = new FXMLLoader(Navigation.class.getResource("/view/" + fxmlPath));
+        Parent root = loader.load();
+
+        T controller = loader.getController();
+        controllerHandler.accept(controller);
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Popup");
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
+    }
 }
+

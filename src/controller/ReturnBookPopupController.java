@@ -2,35 +2,34 @@ package controller;
 
 import DAO.BookDAO;
 import DAO.BorrowRecordDAO;
+import Model.Book;
 import Model.BorrowRecord;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.function.Consumer;
 
 public class ReturnBookPopupController {
 
-    @FXML 
-    private Label lblId;
-    
-    @FXML 
-    private Label lblDueDate;
-    
-    @FXML 
-    private Label lblTotalBooks;
+    @FXML private TableView<BorrowRecord> returnTable;
+    @FXML private TableColumn<BorrowRecord, String> colIsbn;
+    @FXML private TableColumn<BorrowRecord, String> colTitle;
+    @FXML private TableColumn<BorrowRecord, String> colAuthor;
+    @FXML private Label lblReturn, lblCancel;
 
     private BorrowRecord borrowRecord;
+    private Consumer<Void> onReturnSuccess;
+
     private final BorrowRecordDAO borrowRecordDAO = new BorrowRecordDAO();
     private final BookDAO bookDAO = new BookDAO();
-    private Consumer<Void> onReturnSuccess;
 
     public void setBorrowRecord(BorrowRecord record) {
         this.borrowRecord = record;
-        lblId.setText(String.valueOf(record.getUserId()));
-        lblDueDate.setText(record.getDueDate().toString());
-        lblTotalBooks.setText(borrowRecordDAO.getBorrowedBooksCount(borrowRecord.getUserId()) + " Books");
+        returnTable.getItems().setAll(record);
     }
 
     public void setOnReturnSuccess(Consumer<Void> callback) {
@@ -38,29 +37,51 @@ public class ReturnBookPopupController {
     }
 
     @FXML
-    private void btnReturnOnAction() {
-        try {
-            borrowRecord.setReturnDate(new Date(System.currentTimeMillis()));
-            borrowRecord.setStatus("RETURNED");
-
-            boolean success = borrowRecordDAO.updateBorrowRecord(borrowRecord);
-            if (success) {
-                bookDAO.updateAvailableQuantity(borrowRecord.getBookId(), 1);
-                if (onReturnSuccess != null) onReturnSuccess.accept(null);
-                closePopup();
-            }
-        } catch (Exception e) {
-            System.err.println("Return failed: " + e.getMessage());
-        }
+    public void initialize() {
+        colIsbn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBookTitle()));  // or .getIsbn() if added
+        colTitle.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getBookTitle()));
+        colAuthor.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUserName())); // Change to author if needed
     }
 
     @FXML
-    private void btnCancelOnAction() {
-        closePopup();
+    private void btnReturnOnAction() {
+        if (borrowRecord == null) {
+            showAlert("No book selected to return.");
+            return;
+        }
+
+        borrowRecord.setReturnDate(Date.valueOf(LocalDate.now()));
+        borrowRecord.setStatus("RETURNED");
+
+        boolean success = borrowRecordDAO.updateBorrowRecord(borrowRecord);
+        if (success) {
+            bookDAO.updateAvailableQuantity(borrowRecord.getBookId(), 1);
+
+            if (onReturnSuccess != null) {
+                onReturnSuccess.accept(null);
+            }
+
+            closePopup();
+        } else {
+            showAlert("Return failed. Please try again.");
+        }
     }
 
+    @FXML 
+    private void btnCancelOnAction() { 
+        closePopup(); 
+    }
+
+
     private void closePopup() {
-        Stage stage = (Stage) lblId.getScene().getWindow();
+        Stage stage = (Stage) returnTable.getScene().getWindow();
         stage.close();
+    }
+
+    private void showAlert(String msg) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Return Book");
+        alert.setContentText(msg);
+        alert.showAndWait();
     }
 }

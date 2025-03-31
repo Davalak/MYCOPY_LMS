@@ -1,11 +1,9 @@
 package controller;
 
 import Model.User;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+import util.Navigation;
 
 public class MemberDashboardController {
 
@@ -16,59 +14,35 @@ public class MemberDashboardController {
     }
 
     @FXML
-    private void btnBorrowedBookOnAction() {
+    private void btnBorrowedBookOnAction(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MemberBorrowedBooks.fxml"));
-            Parent root = loader.load();
-
-            MemberBorrowedBooksController controller = loader.getController();
-            controller.setUser(currentUser);
-
-            Stage stage = (Stage) root.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Borrowed Books");
-            stage.show();
-
+            Navigation.switchNavigation("MemberBorrowedBooks.fxml", event, (MemberBorrowedBooksController controller) -> {
+                controller.setUser(currentUser);
+            });
         } catch (Exception e) {
-            System.err.println("Failed to load Borrowed Books view: " + e.getMessage());
+            System.err.println("Navigation to Borrowed Books failed: " + e.getMessage());
         }
     }
 
     @FXML
-    private void btnReturnedBookOnAction() {
+    private void btnReturnedBookOnAction(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MemberReturnedBooks.fxml"));
-            Parent root = loader.load();
-
-            MemberReturnedBooksController controller = loader.getController();
-            controller.setUser(currentUser);
-
-            Stage stage = (Stage) root.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Returned Books");
-            stage.show();
-
+            Navigation.switchNavigation("MemberReturnedBooks.fxml", event, (MemberReturnedBooksController controller) -> {
+                controller.setUser(currentUser);
+            });
         } catch (Exception e) {
-            System.err.println("Failed to load Returned Books view: " + e.getMessage());
+            System.err.println("Navigation to Returned Books failed: " + e.getMessage());
         }
     }
 
     @FXML
-    private void btnAvailableBookOnAction() {
+    private void btnAvailableBookOnAction(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MemberBorrow.fxml"));
-            Parent root = loader.load();
-
-            MemberBorrowController controller = loader.getController();
-            controller.setUser(currentUser);
-
-            Stage stage = (Stage) root.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Available Books");
-            stage.show();
-
+            Navigation.switchNavigation("MemberBorrow.fxml", event, (MemberBorrowController controller) -> {
+                controller.setUser(currentUser);
+            });
         } catch (Exception e) {
-            System.err.println("Failed to load Available Books view: " + e.getMessage());
+            System.err.println("Navigation to Available Books failed: " + e.getMessage());
         }
     }
 }

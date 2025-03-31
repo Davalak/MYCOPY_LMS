@@ -1,80 +1,125 @@
 package controller;
 
+import DAO.UserDAO;
+import Model.User;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import Model.User;
-import DAO.UserDAO;
-import util.SceneManager;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import util.Navigation;
+
 import java.io.IOException;
 
 public class LoginController {
-    @FXML private TextField usernameField;
-    @FXML private PasswordField passwordField;
-    @FXML private Label errorLabel;
-    
+
+    @FXML private TextField txtUsername;
+    @FXML private PasswordField txtPassword;
+    @FXML private Label lblUsernameAlert;
+    @FXML private Label lblPasswordAlert;
+
     private final UserDAO userDAO = new UserDAO();
-    
+
     @FXML
-    private void handleLogin() {
-        String username = usernameField.getText();
-        String password = passwordField.getText();
-        
-        if (username.isEmpty() || password.isEmpty()) {
-            showError("Please enter both username and password");
+    private void btnSignInOnAction(ActionEvent event) {
+        clearAlerts();
+
+        String username = txtUsername.getText().trim();
+        String password = txtPassword.getText().trim();
+
+        if (username.isEmpty()) {
+            lblUsernameAlert.setText("Username is required.");
             return;
         }
-        
-        try {
-            User user = userDAO.login(username, password);
-            
-            if (user == null) {
-                showError("Invalid username or password");
-                return;
-            }
-            
-            switch (user.getUserType()) {
-                case "ADMIN":
-                    AdminDashboardController adminController = 
-                        SceneManager.loadAndSwitch("/view/AdminDashboard.fxml");
-                    adminController.setUser(user);
-                    break;
-                    
-                case "LIBRARIAN":
-                    LibrarianDashboardController librarianController = 
-                        SceneManager.loadAndSwitch("/view/LibrarianDashboard.fxml");
-                    librarianController.setUser(user);
-                    break;
-                    
-                case "MEMBER":
-                    MemberDashboardController memberController = 
-                        SceneManager.loadAndSwitch("/view/MemberDashboard.fxml");
-                    memberController.setUser(user);
-                    break;
-                    
-                default:
-                    showError("Unknown user type");
-            }
-        } catch (IOException e) {
-            showError("Error loading dashboard: " + e.getMessage());
-            e.printStackTrace();
-        } catch (Exception e) {
-            showError("An unexpected error occurred");
-            e.printStackTrace();
+
+        if (password.isEmpty()) {
+            lblPasswordAlert.setText("Password is required.");
+            return;
+        }
+
+        User user = userDAO.login(username, password);
+
+        if (user != null) {
+            navigateToDashboard(user, event);
+        } else {
+            lblPasswordAlert.setText("Invalid username or password.");
         }
     }
-    
+
+    private void navigateToDashboard(User user, ActionEvent event) {
+        try {
+            if (user.isAdmin()) {
+                Navigation.switchNavigation("AdminDashboard.fxml", event, (AdminDashboardController controller) -> {
+                    controller.setUser(user);
+                });
+            } else if (user.isMember()) {
+                Navigation.switchNavigation("MemberDashboard.fxml", event, (MemberDashboardController controller) -> {
+                    controller.setUser(user);
+                });
+            } else if (user.isLibrarian()) {
+                Navigation.switchNavigation("LibrarianDashboard.fxml", event, (LibrarianDashboardController controller) -> {
+                    controller.setUser(user);
+                });
+            } else {
+                showAlert("Unknown user role: " + user.getUserType());
+            }
+        } catch (IOException e) {
+            showAlert("Failed to load dashboard: " + e.getMessage());
+        }
+    }
+
     @FXML
-    private void handleRegister() {
+    private void btnSignUpOnAction(ActionEvent event) {
         try {
-            RegisterController controller = SceneManager.loadAndSwitch("/view/Register.fxml");
-            controller.setCurrentUser(null);
+            Navigation.switchNavigation("Register.fxml", event); // Update path if needed
         } catch (IOException e) {
-            showError("Error loading registration form: " + e.getMessage());
+            showAlert("Failed to open sign up: " + e.getMessage());
         }
     }
-    
-    private void showError(String message) {
-        errorLabel.setText(message);
-        errorLabel.setVisible(true);
+
+    @FXML
+    private void hyperForgotPasswordOnAction(ActionEvent event) {
+        showAlert("Forgot password flow not implemented yet.");
+    }
+
+    @FXML
+    private void btnPowerOffOnAction(ActionEvent event) {
+        Navigation.exit();
+    }
+
+    @FXML
+    private void txtUsernameOnKeyPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            txtPassword.requestFocus();
+        }
+    }
+
+    @FXML
+    private void txtPasswordOnKeyPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.ENTER) {
+            btnSignInOnAction(new ActionEvent());
+        }
+    }
+
+    @FXML
+    private void txtUsernameOnAction() {
+        txtPassword.requestFocus();
+    }
+
+    @FXML
+    private void txtPasswordOnAction() {
+        btnSignInOnAction(new ActionEvent());
+    }
+
+    private void clearAlerts() {
+        lblUsernameAlert.setText("");
+        lblPasswordAlert.setText("");
+    }
+
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Login");
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

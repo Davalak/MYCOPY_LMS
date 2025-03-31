@@ -5,8 +5,10 @@ import DAO.BorrowRecordDAO;
 import Model.BorrowRecord;
 import Model.User;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import util.Navigation;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -77,22 +79,16 @@ public class MemberBorrowedBooksController {
     }
 
     @FXML
-    private void btnReturnedBooksOnAction() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MemberReturnedBooks.fxml"));
-            Parent root = loader.load();
-
-            MemberReturnedBooksController controller = loader.getController();
+private void btnReturnedBooksOnAction(ActionEvent event) {
+    try {
+        Navigation.switchNavigation("MemberReturnedBooks.fxml", event, (MemberReturnedBooksController controller) -> {
             controller.setUser(currentUser);
-
-            Stage stage = (Stage) borrowedBooksTable.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Returned Books");
-
-        } catch (IOException e) {
-            showAlert("Failed to load returned books view: " + e.getMessage());
-        }
+        });
+    } catch (Exception e) {
+        System.err.println("Navigation to Returned Books failed: " + e.getMessage());
     }
+}
+
 
     private void addReturnButtonToTable() {
         colAction.setCellFactory(param -> new TableCell<>() {

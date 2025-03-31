@@ -5,6 +5,9 @@ import Model.BorrowRecord;
 import Model.User;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import util.Navigation;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -77,22 +80,15 @@ public class MemberReturnedBooksController {
 
 
     @FXML
-    private void btnBorrowedBooksOnAction() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MemberBorrowedBooks.fxml"));
-            Parent root = loader.load();
-
-            MemberBorrowedBooksController controller = loader.getController();
+private void btnBorrowedBooksOnAction(ActionEvent event) {
+    try {
+        Navigation.switchNavigation("MemberBorrowedBooks.fxml", event, (MemberBorrowedBooksController controller) -> {
             controller.setUser(currentUser);
-
-            Stage stage = (Stage) returnedBooksTable.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Borrowed Books");
-
-        } catch (IOException e) {
-            showAlert("Failed to load borrowed books view: " + e.getMessage());
-        }
+        });
+    } catch (Exception e) {
+        System.err.println("Navigation to Borrowed Books failed: " + e.getMessage());
     }
+}
 
     private void showAlert(String msg) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
