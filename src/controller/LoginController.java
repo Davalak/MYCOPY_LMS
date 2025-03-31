@@ -49,17 +49,17 @@ public class LoginController {
     private void navigateToDashboard(User user, ActionEvent event) {
         try {
             if (user.isAdmin()) {
-                Navigation.switchNavigation("AdminDashboard.fxml", event, (AdminDashboardController controller) -> {
-                    controller.setUser(user);
-                });
+                Navigation.switchNavigation("AdminDashboard.fxml", event); {
+            }
+            
             } else if (user.isMember()) {
-                Navigation.switchNavigation("MemberDashboard.fxml", event, (MemberDashboardController controller) -> {
-                    controller.setUser(user);
-                });
+                Navigation.switchNavigation("MemberDashboard.fxml", event); {
+            }
+                
             } else if (user.isLibrarian()) {
-                Navigation.switchNavigation("LibrarianDashboard.fxml", event, (LibrarianDashboardController controller) -> {
-                    controller.setUser(user);
-                });
+                Navigation.switchNavigation("LibrarianDashboard.fxml", event); {
+            }
+                
             } else {
                 showAlert("Unknown user role: " + user.getUserType());
             }
@@ -71,7 +71,7 @@ public class LoginController {
     @FXML
     private void btnSignUpOnAction(ActionEvent event) {
         try {
-            Navigation.switchNavigation("Register.fxml", event); // Update path if needed
+            Navigation.switchNavigation("Register.fxml", event);
         } catch (IOException e) {
             showAlert("Failed to open sign up: " + e.getMessage());
         }

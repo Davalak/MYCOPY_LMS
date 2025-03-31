@@ -242,15 +242,6 @@ public class AdminMainController implements Initializable {
                 lblLogOut, imgLogOut, "logOutIconWhite.png");
     }
 
-    @FXML
-    void btnSettingsOnAction(ActionEvent event) throws IOException {
-        if (AdminMainController.getInstance().settingsPane.isVisible()) {
-            Navigation.closeAdminSettingsPane();
-        } else {
-            Navigation.imgPopUpBackground("adminSettingsPopUpForm.fxml");
-        }
-    }
-
     private void buttonUnSelected() {
         dashboardButtonSelected = false;
         catalogButtonSelected = false;

@@ -79,15 +79,10 @@ public class MemberBorrowedBooksController {
     }
 
     @FXML
-private void btnReturnedBooksOnAction(ActionEvent event) {
-    try {
-        Navigation.switchNavigation("MemberReturnedBooks.fxml", event, (MemberReturnedBooksController controller) -> {
-            controller.setUser(currentUser);
-        });
-    } catch (Exception e) {
-        System.err.println("Navigation to Returned Books failed: " + e.getMessage());
+    private void btnReturnedBooksOnAction(ActionEvent event) throws IOException {
+        Navigation.switchNavigation("MemberReturnedBooks.fxml", event); {
+        }
     }
-}
 
 
     private void addReturnButtonToTable() {

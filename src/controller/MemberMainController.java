@@ -168,14 +168,6 @@ public class MemberMainController implements Initializable {
                 imgLogOut, "logOutIconWhite.png");
     }
 
-    @FXML
-    void btnSettingsOnAction(ActionEvent event) throws IOException {
-        if (MemberMainController.getInstance().settingsPane.isVisible()) {
-            Navigation.closeUserSettingsPane();
-        } else {
-            Navigation.imgPopUpBackground("userSettingsPopUpForm.fxml");
-        }
-    }
 
     private void buttonUnSelected() {
         dashboardButtonSelected = false;

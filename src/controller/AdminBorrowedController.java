@@ -81,13 +81,7 @@ public class AdminBorrowedController {
     }
 
     @FXML
-    private void btnOverdueBorrowersOnAction(ActionEvent event) {
-        try {
-            Navigation.switchNavigation("AdminOverdue.fxml", event, (AdminBorrowedController controller) -> {
-                controller.setUser(currentUser);
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void btnOverdueBorrowersOnAction(ActionEvent event) throws IOException {
+            Navigation.switchNavigation("AdminOverdue.fxml", event);
     }
 }
