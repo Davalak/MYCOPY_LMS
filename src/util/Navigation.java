@@ -33,6 +33,22 @@ public class Navigation {
         Parent root = loader.load();
         pane.getChildren().add(root);
     }
+    
+    public static <T> void openPopup(String fxmlPath, java.util.function.Consumer<T> controllerHandler) throws IOException {
+        FXMLLoader loader = new FXMLLoader(Navigation.class.getResource("/view/" + fxmlPath));
+        Parent root = loader.load();
+
+        T controller = loader.getController();
+        controllerHandler.accept(controller);
+
+        Stage popupStage = new Stage();
+        popupStage.setScene(new Scene(root));
+        popupStage.setTitle("Popup");
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.setResizable(false);
+        popupStage.showAndWait();
+}
+
 
     public static void close(ActionEvent actionEvent) {
         Node node = (Node) actionEvent.getSource();

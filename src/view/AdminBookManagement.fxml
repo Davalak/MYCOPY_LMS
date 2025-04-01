@@ -23,7 +23,7 @@
                     <TableColumn fx:id="colTitle" prefWidth="447.27471923828125" text="Title" />
                     <TableColumn fx:id="colAuthor" prefWidth="275.68408203125" text="Author" />
                     <TableColumn fx:id="colGenre" prefWidth="236.53570556640625" text="Genre" />
-                    <TableColumn fx:id="colAvailability" prefWidth="182.46435546875" text="Availability" />
+                    <TableColumn fx:id="colStatus" prefWidth="182.46435546875" text="Availability" />
                     <TableColumn fx:id="colActions" prefWidth="118.5" text="Action" />
                 </columns>
             </TableView>
