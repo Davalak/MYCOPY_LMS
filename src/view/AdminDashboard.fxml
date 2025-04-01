@@ -116,7 +116,7 @@
         <!-- Librarians TableView Section -->
         <Pane layoutX="1146.0" layoutY="504.0" prefHeight="363.0" prefWidth="339.0" style="-fx-background-color: white; -fx-background-radius: 12;">
             <children>
-                <Label layoutX="110.0" layoutY="26.0" text="Librarians">
+                <Label layoutX="129.0" layoutY="19.0" text="Librarians">
                     <font>
                         <Font size="22.0" />
                     </font>

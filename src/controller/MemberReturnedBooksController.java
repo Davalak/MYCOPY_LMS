@@ -96,7 +96,7 @@ public class MemberReturnedBooksController {
     @FXML
     private void btnHomeOnAction(ActionEvent event) {
         try {
-            Navigation.switchNavigation("AdminDashboard.fxml", event);
+            Navigation.switchNavigation("MemberDashboard.fxml", event);
         } catch (IOException e) {
             e.printStackTrace();
         }

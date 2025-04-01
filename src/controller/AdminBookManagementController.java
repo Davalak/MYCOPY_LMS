@@ -75,7 +75,7 @@ public class AdminBookManagementController {
             private final HBox hBox = new HBox(10);
             private final ImageView viewIcon = new ImageView(new Image("/assets/viewIconBlack.png"));
             private final ImageView editIcon = new ImageView(new Image("/assets/editIconBlack.png"));
-            private final ImageView deleteIcon = new ImageView(new Image("/assets/deleteIconBlack.png "));
+            private final ImageView deleteIcon = new ImageView(new Image("/assets/deleteIconBlack.png"));
             
             {
             Stream.of(viewIcon, editIcon, deleteIcon).forEach(icon -> {

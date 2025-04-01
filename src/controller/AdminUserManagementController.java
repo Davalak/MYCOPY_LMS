@@ -21,12 +21,21 @@ import java.util.stream.Stream;
 
 public class AdminUserManagementController {
 
-    @FXML private TableView<User> userTable;
-    @FXML private TableColumn<User, String> colUsername;
-    @FXML private TableColumn<User, String> colFullName;
-    @FXML private TableColumn<User, String> colEmail;
-    @FXML private TableColumn<User, String> colUserType;
-    @FXML private TableColumn<User, Void> colActions;
+    @FXML
+    private TableView<User> userTableView;
+    
+    @FXML
+    private TableColumn<User, Integer> colID;
+    @FXML
+    private TableColumn<User, String> colName;
+    @FXML
+    private TableColumn<User, String> colEmail;
+    @FXML
+    private TableColumn<User, String> colUsername;
+    @FXML
+    private TableColumn<User, String> colMember;
+    @FXML
+    private TableColumn<User, Void> colActions;
 
     @FXML private TextField txtSearch;
     @FXML private Label lblSearchAlert;
@@ -47,13 +56,14 @@ public class AdminUserManagementController {
     }
 
     private void setupTableColumns() {
-        colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
-        colFullName.setCellValueFactory(data -> {
-            User u = data.getValue();
-            return new javafx.beans.property.SimpleStringProperty(u.getFullName());
+        colID.setCellValueFactory(new PropertyValueFactory<>("userId"));
+        colName.setCellValueFactory(cellData -> {
+            User user = cellData.getValue();
+            return new javafx.beans.property.SimpleStringProperty(user.getFirstName() + " " + user.getLastName());
         });
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-        colUserType.setCellValueFactory(new PropertyValueFactory<>("userType"));
+        colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
+        colMember.setCellValueFactory(new PropertyValueFactory<>("memberType"));
     }
 
     private void setupActionColumn() {
@@ -86,8 +96,9 @@ public class AdminUserManagementController {
     }
 
     private void loadUsers() {
-        allUsers = FXCollections.observableArrayList(userDAO.getAllUsers());
-        userTable.setItems(allUsers);
+        List<User> users = userDAO.getAllUsers();
+        allUsers = FXCollections.observableArrayList(users);
+        userTableView.setItems(allUsers);
     }
 
     @FXML
@@ -96,7 +107,7 @@ public class AdminUserManagementController {
 
         if (keyword.isEmpty()) {
             lblSearchAlert.setText("Search field cannot be empty.");
-            userTable.setItems(allUsers);
+            userTableView.setItems(allUsers);
             return;
         }
 
@@ -107,7 +118,7 @@ public class AdminUserManagementController {
                              || user.getFullName().toLowerCase().contains(keyword))
                 .collect(Collectors.toList());
 
-        userTable.setItems(FXCollections.observableArrayList(filtered));
+        userTableView.setItems(FXCollections.observableArrayList(filtered));
     }
 
     @FXML

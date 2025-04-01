@@ -51,9 +51,9 @@
                <columns>
                   <TableColumn fx:id="colIsbn" prefWidth="120.0" text="ISBN" />
                   <TableColumn fx:id="colTitle" prefWidth="485.06398010253906" text="Title" />
-                  <TableColumn fx:id="colDueDate" prefWidth="315.0" text="Returned Date" />
+                  <TableColumn fx:id="colReturnDate" prefWidth="315.0" text="Returned Date" />
                   <TableColumn fx:id="colBorrowDate" prefWidth="315.0" text="Borrowed Date" />
-                  <TableColumn fx:id="colAction" prefWidth="203.5897216796875" text="Status" />
+                  <TableColumn fx:id="colStatus" prefWidth="203.5897216796875" text="Status" />
                </columns>
             </TableView>
          </children>

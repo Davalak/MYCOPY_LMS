@@ -27,9 +27,9 @@
       <Pane layoutX="15.0" layoutY="92.0" prefHeight="799.0" prefWidth="1492.0" style="-fx-background-color: white; -fx-background-radius: 12px;">
          <children>
             <Line endX="1349.369140625" layoutX="121.0" layoutY="30.0" startX="-100.0" />
-            <TableView fx:id="bookTableView" layoutX="21.0" layoutY="45.0" prefHeight="722.0" prefWidth="1450.0">
+            <TableView fx:id="bookTable" layoutX="21.0" layoutY="45.0" prefHeight="722.0" prefWidth="1450.0">
                 <columns>
-                    <TableColumn fx:id="colISBN" prefWidth="187.22528839111328" text="ISBN" />
+                    <TableColumn fx:id="colIsbn" prefWidth="187.22528839111328" text="ISBN" />
                     <TableColumn fx:id="colTitle" prefWidth="447.27471923828125" text="Title" />
                     <TableColumn fx:id="colAuthor" prefWidth="275.68408203125" text="Author" />
                     <TableColumn fx:id="colGenre" prefWidth="236.53570556640625" text="Genre" />

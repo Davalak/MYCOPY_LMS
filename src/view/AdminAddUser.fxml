@@ -39,6 +39,7 @@
 
       <!-- Alert Labels -->
       <Label fx:id="lblFirstNameAlert" layoutX="106.0" layoutY="173.0" textFill="RED" />
+      <Label fx:id="lblLastNameAlert" layoutX="106.0" layoutY="173.0" textFill="RED" />
       <Label fx:id="lblEmailAlert" layoutX="106.0" layoutY="225.0" textFill="RED" />
       <Label fx:id="lblUsernameAlert" layoutX="106.0" layoutY="280.0" textFill="RED" />
       <Label fx:id="lblPasswordAlert" layoutX="106.0" layoutY="335.0" textFill="RED" />
