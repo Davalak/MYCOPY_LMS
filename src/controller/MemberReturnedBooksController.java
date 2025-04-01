@@ -92,4 +92,13 @@ public class MemberReturnedBooksController {
         alert.setContentText(msg);
         alert.showAndWait();
     }
+    
+    @FXML
+    private void btnHomeOnAction(ActionEvent event) {
+        try {
+            Navigation.switchNavigation("AdminDashboard.fxml", event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

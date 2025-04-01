@@ -84,4 +84,13 @@ public class AdminBorrowedController {
     private void btnOverdueBorrowersOnAction(ActionEvent event) throws IOException {
             Navigation.switchNavigation("AdminOverdue.fxml", event);
     }
+    
+    @FXML
+    private void btnHomeOnAction(ActionEvent event) {
+        try {
+            Navigation.switchNavigation("AdminDashboard.fxml", event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

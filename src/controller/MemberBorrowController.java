@@ -19,6 +19,7 @@ import util.Navigation;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+import javafx.event.ActionEvent;
 
 public class MemberBorrowController {
 
@@ -142,5 +143,14 @@ public class MemberBorrowController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+    
+    @FXML
+    private void btnHomeOnAction(ActionEvent event) {
+        try {
+            Navigation.switchNavigation("AdminDashboard.fxml", event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

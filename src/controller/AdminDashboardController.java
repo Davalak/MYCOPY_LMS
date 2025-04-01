@@ -5,6 +5,7 @@ import DAO.BorrowRecordDAO;
 import DAO.UserDAO;
 import Model.BorrowRecord;
 import Model.User;
+import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
@@ -19,6 +20,8 @@ import javafx.beans.property.SimpleStringProperty;
 
 
 import java.util.List;
+import javafx.event.ActionEvent;
+import util.Navigation;
 
 public class AdminDashboardController {
     
@@ -101,5 +104,32 @@ public class AdminDashboardController {
 
         List<BorrowRecord> overdueList = borrowDAO.getOverdueBooks();
         overdueTable.getItems().setAll(overdueList);
+    }
+    
+    @FXML
+    private void btnUserOnAction(ActionEvent event) {
+        try {
+            Navigation.switchNavigation("AdminUserManagement.fxml", event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @FXML
+    private void btnBookOnAction(ActionEvent event) {
+        try {
+            Navigation.switchNavigation("AdminBookManagement.fxml", event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    @FXML
+    private void btnLibrarianOnAction(ActionEvent event) {
+        try {
+            Navigation.switchNavigation("AdminDashboard.fxml", event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

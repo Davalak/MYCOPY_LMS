@@ -12,6 +12,16 @@
 
 <Pane prefHeight="905.0" prefWidth="1522.0" style="-fx-background-color: #F2F2F2;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminBorrowedController">
    <children>
+       <Pane fx:id="homePane" layoutX="728.0" layoutY="25.0" prefHeight="44.0" prefWidth="44.0" style="-fx-background-color: white; -fx-background-radius: 10;">
+           <children>
+               <ImageView fx:id="imgHome" fitHeight="24.0" fitWidth="24.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                   <image>
+                       <Image url="@../assets/dashboardIconBlack.png" />
+                   </image>
+               </ImageView>
+           </children>
+       </Pane>
+       <Button blendMode="OVERLAY" layoutX="728.0" layoutY="25.0" onAction="#btnHomeOnAction" prefHeight="44.0" prefWidth="44.0" style="-fx-background-radius: 10;" text=" " />
        <Pane layoutX="283.0" layoutY="27.0" prefHeight="38.0" prefWidth="244.0" style="-fx-background-color: black; -fx-background-radius: 0 12 12 0;">
          <children>
             <Label layoutX="47.0" layoutY="9.0" text="Overdue Borrowers" textFill="WHITE">

@@ -14,6 +14,16 @@
 
 <Pane prefHeight="905.0" prefWidth="1522.0" style="-fx-background-color: #F2F2F2;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdminBookManagementController">
    <children>
+       <Pane fx:id="homePane" layoutX="728.0" layoutY="25.0" prefHeight="44.0" prefWidth="44.0" style="-fx-background-color: white; -fx-background-radius: 10;">
+           <children>
+               <ImageView fx:id="imgHome" fitHeight="24.0" fitWidth="24.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                   <image>
+                       <Image url="@../assets/dashboardIconBlack.png" />
+                   </image>
+               </ImageView>
+           </children>
+       </Pane>
+       <Button blendMode="OVERLAY" layoutX="728.0" layoutY="25.0" onAction="#btnHomeOnAction" prefHeight="44.0" prefWidth="44.0" style="-fx-background-radius: 10;" text=" " />
       <Pane layoutX="15.0" layoutY="92.0" prefHeight="799.0" prefWidth="1492.0" style="-fx-background-color: white; -fx-background-radius: 12px;">
          <children>
             <Line endX="1349.369140625" layoutX="121.0" layoutY="30.0" startX="-100.0" />

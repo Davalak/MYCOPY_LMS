@@ -153,4 +153,14 @@ public class AdminUserManagementController {
             e.printStackTrace();
         }
     }
+    
+    @FXML
+    private void btnHomeOnAction(ActionEvent event) {
+        try {
+            Navigation.switchNavigation("AdminDashboard.fxml", event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
