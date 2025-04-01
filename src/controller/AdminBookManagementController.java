@@ -185,5 +185,14 @@ public class AdminBookManagementController {
             e.printStackTrace();
         }
     }
+    
+    @FXML
+    private void btnLogOutAction(ActionEvent event) {
+        try {
+            Navigation.switchNavigation("Login.fxml", event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

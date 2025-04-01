@@ -99,8 +99,17 @@
          <font>
             <Font size="16.0" />
          </font>
-         
       </Button>
+      <Pane fx:id="logoutPane" layoutX="1570.0" layoutY="825.0" prefHeight="44.0" prefWidth="44.0" style="-fx-background-color: white; -fx-background-radius: 10;">
+           <children>
+               <ImageView fx:id="imglogout" fitHeight="24.0" fitWidth="24.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                   <image>
+                       <Image url="@../assets/logOutIconBlack.png" />
+                   </image>
+               </ImageView>
+           </children>
+       </Pane>
+       <Button blendMode="OVERLAY" layoutX="1570.0" layoutY="825.0" onAction="#btnLogOutAction" prefHeight="44.0" prefWidth="44.0" style="-fx-background-radius: 10;" text=" " />
       <Label fx:id="lblSearchAlert" layoutX="1306.0" layoutY="72.0" textFill="RED">
          <font>
             <Font size="11.0" />

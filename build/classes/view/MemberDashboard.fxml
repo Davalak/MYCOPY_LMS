@@ -30,7 +30,7 @@
             <Line endX="3.136810302734375" endY="109.91000366210938" layoutX="24.0" layoutY="73.0" startX="3.136810302734375" startY="-52.51482391357422" />
          </children>
       </Pane>
-      <Pane layoutX="1048.0" layoutY="45.0" prefHeight="807.0" prefWidth="515.0" style="-fx-background-color: white; -fx-background-radius: 12;">
+      <Pane layoutX="1048.0" layoutY="45.0" prefHeight="426.0" prefWidth="515.0" style="-fx-background-color: white; -fx-background-radius: 12;">
          <children>
             <Text fx:id="textQuote" layoutX="20.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="&quot;The more that you read, the more things you will know. The more that you learn, the more places you’ll go.&quot;" wrappingWidth="478.5522766113281">
                <font>
@@ -93,5 +93,15 @@
          </Button>
       <Button blendMode="OVERLAY" layoutX="52.0" layoutY="650.0" onAction="#btnAvailableBookOnAction" prefHeight="204.0" prefWidth="908.0" style="-fx-background-radius: 12;" text=" ">
          </Button>
+         <Pane fx:id="logoutPane" layoutX="1570.0" layoutY="825.0" prefHeight="44.0" prefWidth="44.0" style="-fx-background-color: white; -fx-background-radius: 10;">
+           <children>
+               <ImageView fx:id="imglogout" fitHeight="24.0" fitWidth="24.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                   <image>
+                       <Image url="@../assets/logOutIconBlack.png" />
+                   </image>
+               </ImageView>
+           </children>
+       </Pane>
+       <Button blendMode="OVERLAY" layoutX="1570.0" layoutY="825.0" onAction="#btnLogOutAction" prefHeight="44.0" prefWidth="44.0" style="-fx-background-radius: 10;" text=" " />
    </children>
 </Pane>

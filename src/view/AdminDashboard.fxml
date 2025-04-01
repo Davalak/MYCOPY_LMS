@@ -128,5 +128,15 @@
                 </TableView>
             </children>
         </Pane>
+        <Pane fx:id="logoutPane" layoutX="10.0" layoutY="850.0" prefHeight="44.0" prefWidth="44.0" style="-fx-background-color: white; -fx-background-radius: 10;">
+           <children>
+               <ImageView fx:id="imglogout" fitHeight="24.0" fitWidth="24.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                   <image>
+                       <Image url="@../assets/logOutIconBlack.png" />
+                   </image>
+               </ImageView>
+           </children>
+       </Pane>
+       <Button blendMode="OVERLAY" layoutX="10.0" layoutY="850.0" onAction="#btnLogOutAction" prefHeight="44.0" prefWidth="44.0" style="-fx-background-radius: 10;" text=" " />
     </children>
 </Pane>

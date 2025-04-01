@@ -44,8 +44,6 @@
       </Pane>
       <Button blendMode="OVERLAY" layoutX="24.0" layoutY="28.0" onAction="#btnBorrowedBooksOnAction" prefHeight="38.0" prefWidth="244.0" style="-fx-background-radius: 12 0 0 12;" text=" " />
       <Button blendMode="OVERLAY" layoutX="289.0" layoutY="28.0" prefHeight="38.0" prefWidth="244.0" style="-fx-background-radius: 0 12 12 0;" text=" " />
-
-      <!-- Table Section -->
       <Pane layoutX="21.0" layoutY="93.0" prefHeight="799.0" prefWidth="1492.0" style="-fx-background-color: white; -fx-background-radius: 12px;">
          <children>
             <Line endX="1349.0" layoutX="121.0" layoutY="71.0" startX="-100.0" />
@@ -60,8 +58,6 @@
             </TableView>
          </children>
       </Pane>
-
-      <!-- Search bar -->
       <Pane fx:id="searchPane" layoutX="1340.0" layoutY="23.0" prefHeight="46.0" prefWidth="300.0" style="-fx-background-color: white; -fx-background-radius: 12;">
          <children>
             <ImageView fitHeight="22.0" fitWidth="22.0" layoutX="16.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
@@ -76,8 +72,6 @@
             </TextField>
          </children>
       </Pane>
-
-      <!-- Sidebar -->
       <Pane layoutX="1534.0" layoutY="93.0" prefHeight="812.5" prefWidth="121.0" style="-fx-background-color: black; -fx-background-radius: 12 0 0 0;">
          <children>
             <Text fill="WHITE" layoutX="-132.0" layoutY="412.0" rotate="-90.0" text="LIBRARY MANAGEMENT SYSTEM" wrappingWidth="384.0">
@@ -87,8 +81,16 @@
             </Text>
          </children>
       </Pane>
-
-      <!-- Alert -->
+      <Pane fx:id="logoutPane" layoutX="1570.0" layoutY="825.0" prefHeight="44.0" prefWidth="44.0" style="-fx-background-color: white; -fx-background-radius: 10;">
+           <children>
+               <ImageView fx:id="imglogout" fitHeight="24.0" fitWidth="24.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                   <image>
+                       <Image url="@../assets/logOutIconBlack.png" />
+                   </image>
+               </ImageView>
+           </children>
+       </Pane>
+       <Button blendMode="OVERLAY" layoutX="1570.0" layoutY="825.0" onAction="#btnLogOutAction" prefHeight="44.0" prefWidth="44.0" style="-fx-background-radius: 10;" text=" " />
       <Label fx:id="lblSearchAlert" layoutX="1356.0" layoutY="71.0" textFill="RED">
          <font>
             <Font size="11.0" />

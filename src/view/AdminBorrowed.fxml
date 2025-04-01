@@ -40,7 +40,7 @@
             </Label>
          </children>
       </Pane>
-      <TableView fx:id="tableBorrowedBooks" layoutX="21.0" layoutY="75.0" prefHeight="722.0" prefWidth="1467.0">
+      <TableView fx:id="tableBorrowedBooks" layoutX="25.0" layoutY="85.0" prefHeight="722.0" prefWidth="1467.0">
           <columns>
               <TableColumn fx:id="colBookId" prefWidth="140" text="ISBN" />
               <TableColumn fx:id="colBookTitle" prefWidth="555.2311859130859" text="Title" />
@@ -75,6 +75,16 @@
          </children>
       </Pane>
       <Button blendMode="OVERLAY" layoutX="1466.0" layoutY="23.0" onAction="#btnRefreshTableOnAction" prefHeight="46.0" prefWidth="46.0" style="-fx-background-radius: 12;" text=" " />
+      <Pane fx:id="logoutPane" layoutX="1450.0" layoutY="850.0" prefHeight="44.0" prefWidth="44.0" style="-fx-background-color: white; -fx-background-radius: 10;">
+           <children>
+               <ImageView fx:id="imglogout" fitHeight="24.0" fitWidth="24.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                   <image>
+                       <Image url="@../assets/logOutIconBlack.png" />
+                   </image>
+               </ImageView>
+           </children>
+       </Pane>
+       <Button blendMode="OVERLAY" layoutX="1450.0" layoutY="850.0" onAction="#btnLogOutAction" prefHeight="44.0" prefWidth="44.0" style="-fx-background-radius: 10;" text=" " />
       <Label fx:id="lblSearchAlert" layoutX="1172.0" layoutY="70.0" textFill="RED">
          <font>
             <Font size="11.0" />
