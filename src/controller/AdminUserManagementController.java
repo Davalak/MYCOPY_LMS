@@ -1,7 +1,6 @@
 package controller;
 
-import DAO.BookDAO;
-import Model.Book;
+import DAO.UserDAO;
 import Model.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,22 +20,22 @@ import java.util.List;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
 
-public class AdminBookManagementController {
+public class AdminUserManagementController {
 
     @FXML
-    private TableView<Book> bookTable;
+    private TableView<User> userTable;
     @FXML
-    private TableColumn<Book, String> colIsbn;
+    private TableColumn<User, String> colID;
     @FXML
-    private TableColumn<Book, String> colTitle;
+    private TableColumn<User, String> colName;
     @FXML
-    private TableColumn<Book, String> colAuthor;
+    private TableColumn<User, String> colEmail;
     @FXML
-    private TableColumn<Book, String> colGenre;
+    private TableColumn<User, String> colUsername;
     @FXML
-    private TableColumn<Book, String> colStatus;
+    private TableColumn<User, String> colMember;
     @FXML
-    private TableColumn<Book, Void> colActions;
+    private TableColumn<User, Void> colActions;
 
 
     @FXML
@@ -44,8 +43,8 @@ public class AdminBookManagementController {
     @FXML
     private Label lblSearchAlert;
 
-    private final BookDAO bookDAO = new BookDAO();
-    private ObservableList<Book> allBooks;
+    private final UserDAO userDAO = new UserDAO();
+    private ObservableList<User> allUsers;
 
     private User currentUser;
 
@@ -57,15 +56,15 @@ public class AdminBookManagementController {
     public void initialize() {
         setupTableColumns();
         setupActionColumn();
-        loadBooks();
+        loadUsers();
     }
 
     private void setupTableColumns() {
-        colIsbn.setCellValueFactory(new PropertyValueFactory<>("isbn"));
-        colTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
-        colAuthor.setCellValueFactory(new PropertyValueFactory<>("author"));
-        colGenre.setCellValueFactory(new PropertyValueFactory<>("genre"));
-        colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+        colID.setCellValueFactory(new PropertyValueFactory<>("ID"));
+        colName.setCellValueFactory(new PropertyValueFactory<>("Name"));
+        colEmail.setCellValueFactory(new PropertyValueFactory<>("Email"));
+        colUsername.setCellValueFactory(new PropertyValueFactory<>("Username"));
+        colMember.setCellValueFactory(new PropertyValueFactory<>("Member"));
         colActions.setCellValueFactory(new PropertyValueFactory<>("actions"));
         
     }
@@ -103,11 +102,11 @@ public class AdminBookManagementController {
 }
 
 
-    private void loadBooks() {
-        List<Book> books = bookDAO.getAllBooks();
-        books.forEach(Book::calculateStatus);
-        allBooks = FXCollections.observableArrayList(books);
-        bookTable.setItems(allBooks);
+    private void loadUsers() {
+        List<User> users = userDAO.getAllUsers();
+        users.forEach(User::calculateStatus);
+        allUsers = FXCollections.observableArrayList(users);
+        userTable.setItems(allUsers);
     }
 
     @FXML
@@ -116,28 +115,30 @@ public class AdminBookManagementController {
 
         if (keyword.isEmpty()) {
             lblSearchAlert.setText("Search field cannot be empty.");
-            bookTable.setItems(allBooks);
+            userTable.setItems(allUsers);
             return;
         }
 
         lblSearchAlert.setText("");
 
-        List<Book> filtered = allBooks.stream()
-                .filter(book ->
-                        book.getIsbn().toLowerCase().contains(keyword) ||
-                        book.getTitle().toLowerCase().contains(keyword) ||
-                        book.getAuthor().toLowerCase().contains(keyword))
+        List<User> filtered = allUsers.stream()
+                .filter(user ->
+                        user.getUsername().toLowerCase().contains(keyword) ||
+                        user.getEmail().toLowerCase().contains(keyword) ||
+                        user.getFirstName().toLowerCase().contains(keyword) ||
+                        user.getLastName().toLowerCase().contains(keyword) ||
+                        user.getMemberType().toLowerCase().contains(keyword))
                 .collect(Collectors.toList());
 
-        bookTable.setItems(FXCollections.observableArrayList(filtered));
+        userTable.setItems(FXCollections.observableArrayList(filtered));
     }
 
     @FXML
-    private void btnAddBookOnAction(ActionEvent event) {
+    private void btnAddUserOnAction(ActionEvent event) {
         try {
-            Navigation.openPopup("AdminAddBook.fxml", (AdminAddBookController controller) -> {
+            Navigation.openPopup("AdminAddUser.fxml", (AdminAddUserController controller) -> {
                 controller.setUser(currentUser);
-                controller.setOnBookAdded(this::loadBooks);
+                controller.setOnUserAdded(this::loadUsers);
             });
 
         } catch (IOException e) {
@@ -145,32 +146,32 @@ public class AdminBookManagementController {
         }
     }
     
-    private void openViewPopup(Book book) {
+    private void openViewPopup(User user) {
         try {
-            Navigation.openPopup("AdminViewBook.fxml", (AdminViewBookController controller) -> {
-                controller.setBook(book);
+            Navigation.openPopup("AdminViewUser.fxml", (AdminViewUserController controller) -> {
+                controller.setUser(user);
             });
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void openUpdatePopup(Book book) {
+    private void openUpdatePopup(User user) {
         try {
-            Navigation.openPopup("AdminUpdateBook.fxml", (AdminUpdateBookController controller) -> {
-                controller.setBook(book);
-                controller.setOnBookUpdated(this::loadBooks);
+            Navigation.openPopup("AdminUpdateUser.fxml", (AdminUpdateUserController controller) -> {
+                controller.setUser(user);
+                controller.setOnUserUpdated(this::loadUsers);
             });
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void openDeletePopup(Book book) {
+    private void openDeletePopup(User user) {
         try {
-            Navigation.openPopup("AdminDeleteBook.fxml", (AdminDeleteBookController controller) -> {
-                controller.setBook(book);
-                controller.setOnBookDeleted(this::loadBooks);
+            Navigation.openPopup("AdminDeleteUser.fxml", (AdminDeleteUserController controller) -> {
+                controller.setUser(user);
+                controller.setOnUserDeleted(this::loadUsers);
             });
         } catch (IOException e) {
         e.printStackTrace();
