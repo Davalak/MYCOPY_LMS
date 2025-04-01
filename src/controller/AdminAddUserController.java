@@ -2,32 +2,51 @@ package controller;
 
 import DAO.UserDAO;
 import Model.User;
-import Model.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+
+import java.util.function.Consumer;
 
 public class AdminAddUserController {
 
-    @FXML private TextField txtName;  
-    @FXML private TextField txtLanguage;  
-    @FXML private TextField txtType; 
-    @FXML private TextField txtName1;     
+    @FXML private TextField txtFirstName;
+    @FXML private TextField txtLastName;
+    @FXML private TextField txtEmail;
+    @FXML private TextField txtUsername;
+    @FXML private PasswordField txtPassword;
+    @FXML private ComboBox<String> comboUserType;
+    @FXML private ComboBox<String> comboMemberType;
 
-    @FXML private Label lblisbnAlert;
-    @FXML private Label lblTitleAlert;
-    @FXML private Label lblAuthorAlert;
-    @FXML private Label lblGenreAlert1;
+    @FXML private Label lblFirstNameAlert;
+    @FXML private Label lblLastNameAlert;
+    @FXML private Label lblEmailAlert;
+    @FXML private Label lblUsernameAlert;
+    @FXML private Label lblPasswordAlert;
+    @FXML private Label lblMemberTypeAlert;
 
-    private Runnable onUserAdded;
     private User currentUser;
+    private Runnable onUserAdded;
 
-    public void setUser(User user) {
-        this.currentUser = user;
+    private final UserDAO userDAO = new UserDAO();
+
+    public void initialize() {
+        comboUserType.getItems().addAll("ADMIN", "LIBRARIAN", "MEMBER");
+        comboMemberType.getItems().addAll("STUDENT", "FACULTY");
+
+        // Default visibility logic
+        comboUserType.setOnAction(event -> {
+            String selected = comboUserType.getValue();
+            comboMemberType.setVisible("MEMBER".equals(selected));
+        });
     }
 
-    public void setOnUserAdded(Runnable onUserAdded) {
+    public void setUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
+
+    public void setOnUserAdded(Runnable callback) {
         this.onUserAdded = onUserAdded;
     }
 
@@ -35,75 +54,92 @@ public class AdminAddUserController {
     private void btnAddOnAction() {
         clearAlerts();
 
-        String isbn = txtName.getText().trim();
-        String title = txtLanguage.getText().trim();
-        String author = txtType.getText().trim();
-        String genre = txtName1.getText().trim();
+        String firstName = txtFirstName.getText().trim();
+        String lastName = txtLastName.getText().trim();
+        String email = txtEmail.getText().trim();
+        String username = txtUsername.getText().trim();
+        String password = txtPassword.getText();
+        String userType = comboUserType.getValue();
+        String memberType = "MEMBER".equals(userType) ? comboMemberType.getValue() : null;
 
-        boolean valid = true;
+        if (!validateInputs(firstName, lastName, email, username, password, userType, memberType)) return;
 
-        if (isbn.isEmpty()) {
-            lblisbnAlert.setText("ISBN is required");
-            valid = false;
-        }
+        User newUser = new User();
+        newUser.setFirstName(firstName);
+        newUser.setLastName(lastName);
+        newUser.setEmail(email);
+        newUser.setUsername(username);
+        newUser.setPassword(password);
+        newUser.setUserType(userType);
+        newUser.setMemberType(memberType);
 
-        if (title.isEmpty()) {
-            lblTitleAlert.setText("Title is required");
-            valid = false;
-        }
-
-        if (author.isEmpty()) {
-            lblAuthorAlert.setText("Author is required");
-            valid = false;
-        }
-
-        if (genre.isEmpty()) {
-            lblGenreAlert1.setText("Genre is required");
-            valid = false;
-        }
-
-        if (!valid) return;
-
-        User user = new User();
-        user.setIsbn(isbn);
-        user.setTitle(title);
-        user.setAuthor(author);
-        user.setGenre(genre);
-        user.setQuantity(1);
-        user.setAvailableQuantity(1);
-
-        boolean success = new UserDAO().addUser(user);
-
-        if (success) {
+        if (userDAO.addUser(newUser)) {
             if (onUserAdded != null) {
                 onUserAdded.run();
             }
-            closeStage();
+            closePopup();
         } else {
-            lblisbnAlert.setText("Failed to add user (maybe ISBN exists)");
+            lblUsernameAlert.setText("Failed to add user. Try another username.");
         }
     }
 
     @FXML
     private void btnCancelOnAction() {
-        closeStage();
+        closePopup();
     }
 
     @FXML
     private void btnCloseOnAction() {
-        closeStage();
+        closePopup();
     }
 
-    private void closeStage() {
-        Stage stage = (Stage) txtName.getScene().getWindow();
-        stage.close();
+    private boolean validateInputs(String firstName, String lastName, String email, String username,
+                                   String password, String userType, String memberType) {
+        boolean isValid = true;
+
+        if (firstName.isEmpty()) {
+            lblFirstNameAlert.setText("First name is required.");
+            isValid = false;
+        }
+        if (lastName.isEmpty()) {
+            lblLastNameAlert.setText("Last name is required.");
+            isValid = false;
+        }
+        if (email.isEmpty() || !email.contains("@")) {
+            lblEmailAlert.setText("Valid email required.");
+            isValid = false;
+        }
+        if (username.isEmpty()) {
+            lblUsernameAlert.setText("Username is required.");
+            isValid = false;
+        }
+        if (password.isEmpty() || password.length() < 6) {
+            lblPasswordAlert.setText("Password must be at least 6 characters.");
+            isValid = false;
+        }
+        if (userType == null) {
+            lblUsernameAlert.setText("User type required.");
+            isValid = false;
+        }
+        if ("MEMBER".equals(userType) && memberType == null) {
+            lblMemberTypeAlert.setText("Please select member type.");
+            isValid = false;
+        }
+
+        return isValid;
     }
 
     private void clearAlerts() {
-        lblisbnAlert.setText("");
-        lblTitleAlert.setText("");
-        lblAuthorAlert.setText("");
-        lblGenreAlert1.setText("");
+        lblFirstNameAlert.setText("");
+        lblLastNameAlert.setText("");
+        lblEmailAlert.setText("");
+        lblUsernameAlert.setText("");
+        lblPasswordAlert.setText("");
+        lblMemberTypeAlert.setText("");
     }
 
+    private void closePopup() {
+        Stage stage = (Stage) txtFirstName.getScene().getWindow();
+        stage.close();
+    }
 }

@@ -44,6 +44,12 @@ public class AdminViewBookController {
         Stage stage = (Stage) tblBookDetails.getScene().getWindow();
         stage.close();
     }
+    
+    @FXML
+    private void btnExitOnAction(ActionEvent event) {
+        Stage stage = (Stage) tblBookDetails.getScene().getWindow();
+        stage.close();
+    }
 
     public static class RowItem {
         private final String field;
