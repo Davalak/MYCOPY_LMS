@@ -34,10 +34,13 @@ public class MemberBorrowController {
 
     private final BookDAO bookDAO = new BookDAO();
     private User currentUser;
+    private Book selectedBook;
+
 
     public void setUser(User user) {
         this.currentUser = user;
-        loadBooks();
+        
+        System.out.println("First User on Member borrow " + currentUser);
     }
 
     @FXML
@@ -47,11 +50,15 @@ public class MemberBorrowController {
         bookAuthorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
         bookStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
 
+        loadBooks();
         addBorrowButtonToTable();
+        
+        System.out.println("User on Member borrow " + currentUser);
     }
 
     private void loadBooks() {
         List<Book> availableBooks = bookDAO.getAvailableBooks();
+
         booksTable.getItems().setAll(availableBooks);
         lblSearchAlert.setText(availableBooks.isEmpty() ? "No available books found." : "");
     }
@@ -92,7 +99,9 @@ public class MemberBorrowController {
 
         openBorrowPopup(selectedBook);
     }
-
+    
+    
+    
     private void addBorrowButtonToTable() {
         Callback<TableColumn<Book, Void>, TableCell<Book, Void>> cellFactory = param -> new TableCell<>() {
             private final Button btn = new Button("Borrow");
@@ -101,6 +110,8 @@ public class MemberBorrowController {
                 btn.setStyle("-fx-background-color: black; -fx-text-fill: white; -fx-background-radius: 6;");
                 btn.setOnAction(event -> {
                     Book book = getTableView().getItems().get(getIndex());
+                    
+                    System.out.println("Book " + book);
                     openBorrowPopup(book);
                 });
             }
@@ -117,24 +128,19 @@ public class MemberBorrowController {
 
     private void openBorrowPopup(Book book) {
     try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/BorrowBookPopup.fxml"));
-        Parent root = loader.load();
-
-        BorrowBookPopupController controller = loader.getController();
-        controller.setBook(book);
-        controller.setUser(currentUser);
-        controller.setOnBorrowSuccess(v -> loadBooks());
-
-        Stage stage = new Stage();
-        stage.setScene(new Scene(root));
-        stage.setTitle("Borrow Book");
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.showAndWait();
-
+        Navigation.openPopup("BorrowBookPopup.fxml", (BorrowBookPopupController controller) -> {
+            controller.setUser(currentUser);
+            controller.setBook(book);
+            controller.setOnBorrowSuccess(this::loadBooks);
+            
+            System.out.println("book from nav" + book);
+            System.out.println("user from nav" + currentUser);
+        });
     } catch (IOException e) {
-        showAlert("Failed to open borrow popup: " + e.getMessage());
+        e.printStackTrace();
     }
 }
+
 
 
     private void showAlert(String message) {
@@ -162,4 +168,5 @@ public class MemberBorrowController {
             e.printStackTrace();
         }
     }
+    
 }

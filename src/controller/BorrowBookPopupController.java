@@ -12,7 +12,6 @@ import javafx.stage.Stage;
 import util.DateTime;
 
 import java.sql.Date;
-import java.util.function.Consumer;
 
 public class BorrowBookPopupController {
 
@@ -27,7 +26,7 @@ public class BorrowBookPopupController {
 
     private Book selectedBook;
     private User currentUser;
-    private Consumer<Void> onBorrowSuccess;
+    private Runnable onBorrowSuccess;
 
     private final BorrowRecordDAO borrowRecordDAO = new BorrowRecordDAO();
     private final BookDAO bookDAO = new BookDAO();
@@ -41,7 +40,7 @@ public class BorrowBookPopupController {
         this.currentUser = user;
     }
 
-    public void setOnBorrowSuccess(Consumer<Void> callback) {
+    public void setOnBorrowSuccess(Runnable callback) {
         this.onBorrowSuccess = callback;
     }
 
@@ -72,7 +71,7 @@ public class BorrowBookPopupController {
         if (success) {
             bookDAO.updateAvailableQuantity(selectedBook.getBookId(), -1);
             if (onBorrowSuccess != null) {
-                onBorrowSuccess.accept(null);
+                onBorrowSuccess.run();
             }
             closePopup();
         } else {

@@ -7,7 +7,8 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -45,13 +46,13 @@
             <HBox alignment="CENTER_LEFT" layoutX="62.0" layoutY="15.0" prefHeight="60.0" prefWidth="1409.0">
             </HBox>
             <Pane layoutX="1472.0" layoutY="73.0" prefHeight="722.0" prefWidth="17.0" style="-fx-background-color: white;" />
-              <TableView fx:id="booksTable" layoutX="18.0" layoutY="50.0" prefHeight="46.0" prefWidth="1451.0">
+              <TableView fx:id="booksTable" layoutX="18.0" layoutY="50.0" prefHeight="725.0" prefWidth="1451.0">
                   <columns>
                       <TableColumn fx:id="bookIdColumn" prefWidth="125.15163040161133" text="ISBN" />
-                      <TableColumn fx:id="bookTitle" prefWidth="538.6114959716797" text="Title" />
-                      <TableColumn fx:id="bookAuthorColumn" minWidth="0.0" prefWidth="445.162353515625" text="Author" />
-                      <TableColumn fx:id="bookStatusColumn" minWidth="0.0" prefWidth="201.837646484375" text="Availability" />
-                      <TableColumn fx:id="bookActionsColumn" prefWidth="115.9034423828125" text="Actions" />
+                      <TableColumn fx:id="bookTitle" prefWidth="648.5329437255859" text="Title" />
+                      <TableColumn fx:id="bookAuthorColumn" minWidth="0.0" prefWidth="335.967041015625" text="Author" />
+                      <TableColumn fx:id="bookStatusColumn" minWidth="0.0" prefWidth="240.209228515625" text="Availability" />
+                      <TableColumn fx:id="bookActionsColumn" prefWidth="99.790771484375" text="Actions" />
                   </columns>
               </TableView>
          </children>

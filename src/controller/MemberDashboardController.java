@@ -30,9 +30,11 @@ public class MemberDashboardController {
 
     @FXML
     private void btnAvailableBookOnAction(ActionEvent event) throws IOException {
-            Navigation.switchNavigation("MemberBorrow.fxml", event); {
-      
-        }
+            Navigation.openPopup("MemberBorrow.fxml", (MemberBorrowController controller) -> {
+            controller.setUser(currentUser);
+            
+            System.out.println("User from Dashboard to borrow " + currentUser);
+            });
     }
     
     @FXML

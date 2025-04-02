@@ -19,6 +19,11 @@ public class LoginController {
     @FXML private Label lblPasswordAlert;
 
     private final UserDAO userDAO = new UserDAO();
+    private User currentUser;
+
+    public void setUser(User user) {
+        this.currentUser = user;
+    }
 
     @FXML
     private void btnSignInOnAction(ActionEvent event) {
@@ -38,6 +43,9 @@ public class LoginController {
         }
 
         User user = userDAO.login(username, password);
+        
+        System.out.println("user " + user );
+        
 
         if (user != null) {
             navigateToDashboard(user, event);
@@ -50,11 +58,18 @@ public class LoginController {
         try {
             if (user.isAdmin()) {
                 Navigation.switchNavigation("AdminDashboard.fxml", event); {
+                
+                System.out.println(user);
             }
             
             } else if (user.isMember()) {
-                Navigation.switchNavigation("MemberDashboard.fxml", event); {
-            }
+              //  Navigation.switchNavigation("MemberDashboard.fxml", event); {
+           // }
+           Navigation.openPopup("MemberDashboard.fxml", (MemberDashboardController controller) -> {
+            controller.setUser(user);
+            
+            System.out.println(user);
+        });
                 
             } else if (user.isLibrarian()) {
                 Navigation.switchNavigation("LibrarianDashboard.fxml", event); {
